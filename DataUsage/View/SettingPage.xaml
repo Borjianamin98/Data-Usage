@@ -1,0 +1,331 @@
+﻿<Page
+    x:Class="DataUsage.View.SettingPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:DataUsage.View"
+    xmlns:model="using:CommonClass.Model"
+    xmlns:control="using:DataUsage.Controls"
+    xmlns:syncfusion="using:Syncfusion.UI.Xaml.Controls.Input"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <Page.Resources>
+        <Storyboard x:Name="ShowErrorlblDataPlanAnimation">
+            <DoubleAnimation Storyboard.TargetName="lblDataPlanError" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" From="100" To="0" Duration="0:0:0.1" EnableDependentAnimation="True"/>
+            <DoubleAnimation Storyboard.TargetName="lblDataPlanError" Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.2"/>
+        </Storyboard>
+        <Storyboard x:Name="ShowErrorlblGeneralAnimation">
+            <DoubleAnimation Storyboard.TargetName="lblGeneralError" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" From="100" To="0" Duration="0:0:0.1" EnableDependentAnimation="True"/>
+            <DoubleAnimation Storyboard.TargetName="lblGeneralError" Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.2"/>
+        </Storyboard>
+    </Page.Resources>
+
+    <Grid>
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="VisualStateGroup" CurrentStateChanged="VisualStateGroup_CurrentStateChanged">
+                <VisualState x:Name="VisualStateMin0">
+                    <VisualState.Setters>
+                        <Setter Target="GridDataPlan.ColumnDefinitions[1].Width" Value="0"/>
+                        <Setter Target="GridDataPlan.RowDefinitions[0].Height" Value="Auto"/>
+                        <Setter Target="GridColumn1.Margin" Value="0"/>
+                        <Setter Target="GridColumn2.Margin" Value="0,5,0,0"/>
+                        <Setter Target="GridColumn2.(Grid.Column)" Value="0"/>
+                        <Setter Target="GridColumn2.(Grid.Row)" Value="1"/>
+                        <Setter Target="MainScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+                        <Setter Target="ComboBoxCalendarType.HorizontalAlignment" Value="Stretch"/>
+                        <Setter Target="ComboBoxCalendarType.MinWidth" Value="0"/>
+                        <Setter Target="txtDailyUsage.MinWidth" Value="0"/>
+                        <Setter Target="txtDataLimit.MinWidth" Value="0"/>
+                        <Setter Target="ComboBoxFontSize.HorizontalAlignment" Value="Stretch"/>
+                        <Setter Target="ComboBoxFontSize.MinWidth" Value="0"/>
+                        <Setter Target="ComboBoxConnections.HorizontalAlignment" Value="Stretch"/>
+                        <Setter Target="ComboBoxConnections.MinWidth" Value="0"/>
+                        <Setter Target="GridNotification.ColumnDefinitions[1].Width" Value="*"/>
+                        <Setter Target="GridDayTime.HorizontalAlignment" Value="Stretch"/>
+                        <Setter Target="TimePickerDayTimeStart.MinWidth" Value="0"/>
+                        <Setter Target="TimePickerDayTimeEnd.MinWidth" Value="0"/>
+                        <Setter Target="GridDayTimeWithText.ColumnDefinitions[0].Width" Value="*"/>
+                        <Setter Target="GridDayTimeWithText.ColumnDefinitions[1].Width" Value="0"/>
+                        <Setter Target="GridDayTime.(Grid.Column)" Value="0"/>
+                        <Setter Target="GridDayTime.(Grid.Row)" Value="1"/>
+                    </VisualState.Setters>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="1"/>
+                    </VisualState.StateTriggers>
+                </VisualState>
+                <VisualState x:Name="VisualStateMin650">
+                    <VisualState.Setters/>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="650"/>
+                    </VisualState.StateTriggers>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+        <Pivot>
+            <PivotItem Header="General" Padding="0,5">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="2" VerticalScrollMode="Enabled" VerticalAlignment="Top" ZoomMode="Disabled">
+                    <StackPanel>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="Calendar:" FontSize="{x:Bind ViewModel.MainFont, Mode=OneWay}" Margin="0,0,5,0" VerticalAlignment="Center"/>
+                            <ComboBox x:Name="ComboBoxCalendarType" FontSize="{x:Bind ViewModel.MainFont, Mode=OneWay}"
+                                      Grid.Column="1" MinWidth="140" SelectionChanged="ComboBoxCalendarType_SelectionChanged">
+                                <ComboBoxItem Content="Gregorian"/>
+                                <ComboBoxItem Content="Persian"/>
+                            </ComboBox>
+
+                            <TextBlock Text="Font Size:" FontSize="{x:Bind ViewModel.MainFont, Mode=OneWay}" Margin="0,0,5,0" VerticalAlignment="Center" Grid.Row="1"/>
+                            <ComboBox x:Name="ComboBoxFontSize" FontSize="{x:Bind ViewModel.MainFont, Mode=OneWay}" Grid.Row="1" Grid.Column="1" Margin="0,5,0,0" MinWidth="140"
+                                  HorizontalContentAlignment="Left" SelectedValue="{x:Bind ViewModel.SelectedFontSize,Mode=TwoWay}" SelectedValuePath="Content">
+                                <ComboBoxItem Content="Small" />
+                                <ComboBoxItem Content="Medium" />
+                                <ComboBoxItem Content="Big" />
+                            </ComboBox>
+                        </Grid>
+                        <StackPanel Orientation="Vertical" Margin="0,5,0,0">
+                            <TextBlock Text="Default app mode:" FontSize="{x:Bind ViewModel.MainFont, Mode=OneWay}" Margin="0,5" VerticalAlignment="Center"/>
+                            <StackPanel Orientation="Horizontal">
+                                <RadioButton x:Name="RadioLight" Content="Light" VerticalContentAlignment="Center" Padding="5,0" GroupName="AppMode" FontSize="{x:Bind ViewModel.MainFont, Mode=OneWay}" Click="RadioButtonAppMode_Click"/>
+                                <RadioButton x:Name="RadioDark" Content="Dark" VerticalContentAlignment="Center" Padding="5,0" GroupName="AppMode" FontSize="{x:Bind ViewModel.MainFont, Mode=OneWay}" Click="RadioButtonAppMode_Click"/>
+                            </StackPanel>
+                        </StackPanel>
+                        <TextBlock x:Name="lblBackgroundTaskError" Text="Background task denied by system policy or user." Foreground="Red" Visibility="Collapsed" FontSize="{x:Bind ViewModel.MainFont,Mode=OneWay}"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="Tile:" FontSize="{x:Bind ViewModel.MainFont, Mode=OneWay}" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <ToggleSwitch x:Name="toggleTile" OnContent="On" OffContent="Off" FontSize="{x:Bind ViewModel.MainFont, Mode=OneWay}" Grid.Column="1" Toggled="toggleTile_Toggled"/>
+                            
+                            <TextBlock Text="Notification:" FontSize="{x:Bind ViewModel.MainFont, Mode=OneWay}" Margin="0,0,10,0" VerticalAlignment="Center" Grid.Row="1"/>
+                            <ToggleSwitch x:Name="toggleNotification" OnContent="On" OffContent="Off" FontSize="{x:Bind ViewModel.MainFont, Mode=OneWay}" Grid.Row="1" Grid.Column="1" Toggled="toggleNotification_Toggled"/>
+                        </Grid>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Connection:" FontSize="{x:Bind ViewModel.MainFont, Mode=OneWay}" Margin="0,0,5,5" VerticalAlignment="Center"/>
+                            <ComboBox x:Name="ComboBoxConnections" Grid.Column="1" HorizontalAlignment="Left" MinWidth="200" Margin="0,0,0,5" FontSize="{x:Bind ViewModel.MainFont, Mode=OneWay}" 
+                                      VerticalAlignment="Stretch" SelectionChanged="ComboBoxConnections_SelectionChanged" ItemTemplate="{StaticResource ListConnections}" IsEnabled="{x:Bind toggleTile.IsOn, Mode=OneWay}">
+                                <ComboBox.ItemContainerTransitions>
+                                    <TransitionCollection>
+                                        <EntranceThemeTransition FromVerticalOffset="50"/>
+                                    </TransitionCollection>
+                                </ComboBox.ItemContainerTransitions>
+                            </ComboBox>
+                        </Grid>
+                        <Grid x:Name="GridNotification" Margin="0,5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="Data limit:" FontSize="{x:Bind ViewModel.MainFont, Mode=OneWay}" Margin="0,0,5,13" VerticalAlignment="Bottom"/>
+                            <syncfusion:SfNumericTextBox x:Name="txtDataLimit" Grid.Column="1" TextAlignment="Center" VerticalContentAlignment="Stretch" TextChanged="txtDataLimit_TextChanged" Background="Transparent"
+                                 Padding="5" Margin="0,0,5,5" FormatString="N0" MinWidth="100" MaxLength="4" FontSize="{x:Bind ViewModel.MainFont, Mode=OneWay}" IsEnabled="{x:Bind toggleNotification.IsOn, Mode=OneWay}"/>
+                            <ComboBox x:Name="txtDataLimitUnit" Margin="0,0,0,5" HorizontalContentAlignment="Center" Grid.Column="2" MinWidth="75" FontSize="{x:Bind ViewModel.MainFont, Mode=OneWay}"
+                              IsEnabled="{x:Bind toggleNotification.IsOn, Mode=OneWay}" SelectionChanged="txtDataLimitUnit_SelectionChanged" VerticalAlignment="Stretch">
+                                <ComboBoxItem Content="GB"/>
+                                <ComboBoxItem Content="MB"/>
+                            </ComboBox>
+                            <TextBlock Text="Daily usage:" Grid.Row="1" FontSize="{x:Bind ViewModel.MainFont, Mode=OneWay}" Margin="0,0,5,0" VerticalAlignment="Center"/>
+                            <syncfusion:SfNumericTextBox x:Name="txtDailyUsage" Grid.Column="1" Grid.Row="1" TextAlignment="Center" VerticalContentAlignment="Stretch" TextChanged="txtDailyUsage_TextChanged" Background="Transparent"
+                                 Padding="5" Margin="0,0,5,5" FormatString="N0" MinWidth="100" MaxLength="4" FontSize="{x:Bind ViewModel.MainFont, Mode=OneWay}" IsEnabled="{x:Bind toggleNotification.IsOn, Mode=OneWay}"/>
+                            <ComboBox x:Name="txtDailyUsageUnit" Margin="0,0,0,5" HorizontalContentAlignment="Center" Grid.Row="1" Grid.Column="2" MinWidth="75" FontSize="{x:Bind ViewModel.MainFont, Mode=OneWay}"
+                              IsEnabled="{x:Bind toggleNotification.IsOn, Mode=OneWay}" SelectionChanged="txtDailyUsageUnit_SelectionChanged" VerticalAlignment="Stretch">
+                                <ComboBoxItem Content="GB"/>
+                                <ComboBoxItem Content="MB"/>
+                            </ComboBox>
+                        </Grid>
+                        <Grid x:Name="GridDayTimeWithText">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="Day Time:" Margin="0,0,5,0" Grid.Column="0" FontSize="{x:Bind ViewModel.MainFont, Mode=OneWay}" VerticalAlignment="Center"/>
+                            <Grid x:Name="GridDayTime" Margin="0,5" HorizontalAlignment="Left" Grid.Column="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TimePicker x:Name="TimePickerDayTimeStart" MinWidth="150" HorizontalAlignment="Stretch" Grid.Column="0" ClockIdentifier="24HourClock"
+                                        FontSize="{x:Bind ViewModel.MainFont, Mode=OneWay}" TimeChanged="TimePickerDayTimeStart_TimeChanged"/>
+                                <TextBlock Text="To" FontSize="{x:Bind ViewModel.MainFont, Mode=OneWay}" Grid.Column="1" VerticalAlignment="Center" Margin="5,0"/>
+                                <TimePicker x:Name="TimePickerDayTimeEnd" MinWidth="150" HorizontalAlignment="Stretch" Grid.Column="2" ClockIdentifier="24HourClock"
+                                        FontSize="{x:Bind ViewModel.MainFont, Mode=OneWay}" TimeChanged="TimePickerDayTimeEnd_TimeChanged"/>
+                            </Grid>
+                        </Grid>
+                        <TextBlock x:Name="lblGeneralError" TextWrapping="Wrap" Foreground="Red" FontSize="{x:Bind ViewModel.MainFont, Mode=OneWay}" TextAlignment="Justify">
+                            <TextBlock.RenderTransform>
+                                <CompositeTransform/>
+                            </TextBlock.RenderTransform>
+                        </TextBlock>
+                        <TextBlock FontSize="{x:Bind ViewModel.MainFont, Mode=OneWay}" HorizontalAlignment="Left" TextWrapping="Wrap" TextAlignment="Justify" MaxWidth="700">
+                            Note: Data limit will inform you if you have the amount of remaining. (Data Plan must be enabled) <LineBreak/>
+                            Note: You will receive a notification if you go over daily usage (Daily usage calculated based on day time).<LineBreak/>
+                            Note: Tile shows the selected connection usage with discount in current day (Usage calculated based on day time).
+                        </TextBlock>
+                    </StackPanel>
+                </ScrollViewer>
+
+            </PivotItem>
+            <PivotItem Header="Data Plan" Padding="0,5">
+                <ScrollViewer x:Name="MainScrollViewer" VerticalScrollBarVisibility="Disabled">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <StackPanel Orientation="Horizontal" Grid.Row="0">
+                            <TextBlock Text="Data Plan:" FontSize="{x:Bind ViewModel.MainFont, Mode=OneWay}" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <ToggleSwitch x:Name="toggleDataPlan" OnContent="On" OffContent="Off" FontSize="{x:Bind ViewModel.MainFont, Mode=OneWay}" Toggled="toggleDataPlan_Toggled"/>
+                        </StackPanel>
+                        <Grid x:Name="GridDataPlan" Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Border x:Name="GridColumn1" Grid.Column="0" Style="{StaticResource BorderBox}" Margin="0,0,2.5,0" Padding="5">
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock Text="Data Plan Setting" FontSize="{x:Bind ViewModel.TopicFont, Mode=OneWay}" Margin="0,0,0,10"/>
+                                    <TextBlock Text="Data:" FontSize="{x:Bind ViewModel.MainFont, Mode=OneWay}" Margin="0,0,0,5"/>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <syncfusion:SfNumericTextBox x:Name="txtData" IsEnabled="{x:Bind toggleDataPlan.IsOn, Mode=OneWay}" VerticalAlignment="Center" FormatString="N1" MaxLength="5" Padding="5" Background="Transparent"
+                                                                     FontSize="{x:Bind ViewModel.MainFont, Mode=OneWay}" TextChanged="txtData_TextChanged"/>
+                                        <ListView x:Name="listDataPlanUnit" IsEnabled="{x:Bind toggleDataPlan.IsOn, Mode=OneWay}" Grid.Column="1" Margin="5,0,0,0" VerticalAlignment="Stretch" FontSize="{x:Bind ViewModel.MainFont, Mode=OneWay}"
+                                                  ScrollViewer.VerticalScrollMode="Disabled" ScrollViewer.HorizontalScrollMode="Disabled" SelectionChanged="listDataPlanUnit_SelectionChanged">
+                                            <ListView.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <StackPanel Orientation="Horizontal"/>
+                                                </ItemsPanelTemplate>
+                                            </ListView.ItemsPanel>
+                                            <ListView.ItemContainerStyle>
+                                                <Style TargetType="ListViewItem">
+                                                    <Setter Property="MinWidth" Value="35"/>
+                                                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                    <Setter Property="VerticalContentAlignment" Value="Center"/>
+                                                    <Setter Property="MinHeight" Value="0"/>
+                                                    <Setter Property="Padding" Value="0"/>
+                                                    <Setter Property="Margin" Value="0"/>
+                                                </Style>
+                                            </ListView.ItemContainerStyle>
+                                            <ListViewItem Content="GB"/>
+                                            <ListViewItem Content="MB"/>
+                                        </ListView>
+                                    </Grid>
+                                    <TextBlock Text="Start Time:" FontSize="{x:Bind ViewModel.MainFont, Mode=OneWay}" Margin="0,5" VerticalAlignment="Center"/>
+                                    <CalendarDatePicker x:Name="DatePickerPeriod" HorizontalAlignment="Stretch" MinWidth="0" FontSize="{x:Bind ViewModel.MainFont, Mode=OneWay}" 
+                                                        DateFormat="{}{month.full} {day.integer}, {year.full}" FirstDayOfWeek="Saturday" DateChanged="DatePickerPeriod_DateChanged"
+                                                        CalendarIdentifier="GregorianCalendar"/>
+                                    <Grid Margin="0,5">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="Period:" FontSize="{x:Bind ViewModel.MainFont, Mode=OneWay}" VerticalAlignment="Center"/>
+                                        <ComboBox x:Name="ComboBoxPeriod" MinWidth="70" Grid.Column="1" Margin="5,0" FontSize="{x:Bind ViewModel.MainFont, Mode=OneWay}"
+                                                  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Stretch" SelectionChanged="ComboBoxPeriod_SelectionChanged">
+                                            <ComboBoxItem Content="Daily"/>
+                                            <ComboBoxItem Content="Monthly"/>
+                                            <ComboBoxItem Content="Custom"/>
+                                        </ComboBox>
+                                        <syncfusion:SfNumericTextBox x:Name="txtPeriodCustom" VerticalAlignment="Stretch" Grid.Column="2" FormatString="N0" Background="Transparent" Padding="5" MaxLength="3" 
+                                                                     FontSize="{x:Bind ViewModel.MainFont, Mode=OneWay}" TextChanged="txtPeriodCustom_TextChanged"/>
+                                        <TextBlock Text="day" Grid.Column="3" Margin="5,0,0,0" FontSize="{x:Bind ViewModel.MainFont, Mode=OneWay}" VerticalAlignment="Center" Visibility="{x:Bind txtPeriodCustom.Visibility, Mode=OneWay}"/>
+                                    </Grid>
+                                    <TextBlock Text="If you period is over, we automatically change start time based on your period." TextWrapping="Wrap" FontSize="{x:Bind ViewModel.MainFont,Mode=OneWay}" TextAlignment="Justify"/>
+                                    <TextBlock x:Name="lblDataPlanError" Foreground="Red" Margin="0,5" FontSize="{x:Bind ViewModel.MainFont, Mode=OneWay}" TextWrapping="Wrap" RenderTransformOrigin="0.5,0.5" TextAlignment="Justify">
+                                        <TextBlock.RenderTransform>
+                                            <CompositeTransform/>
+                                        </TextBlock.RenderTransform>
+                                    </TextBlock>
+                                </StackPanel>
+                            </Border>
+                            <Border x:Name="GridColumn2" Grid.Column="1" Style="{StaticResource BorderBox}" Margin="2.5,0,0,0" Padding="5">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="Discounts" FontSize="{x:Bind ViewModel.TopicFont, Mode=OneWay}" Margin="0,0,0,10" VerticalAlignment="Center"/>
+                                        <Button x:Name="BtnAddDiscount" Grid.Column="1" MinWidth="0" Padding="5" Margin="0,0,0,5" Click="BtnAddDiscount_Click" VerticalAlignment="Center">
+                                            <SymbolIcon Symbol="Add"/>
+                                        </Button>
+                                    </Grid>
+                                    <ScrollViewer x:Name="ScrollViewerReport" VerticalScrollBarVisibility="Auto" Grid.Row="2" VerticalScrollMode="Enabled" 
+                                                  VerticalAlignment="Top" ZoomMode="Disabled" Padding="0,5">
+                                        <ItemsControl x:Name="ListDiscounts" ScrollViewer.HorizontalScrollMode="Disabled" ScrollViewer.VerticalScrollMode="Disabled" Grid.Row="1" >
+                                            <ItemsControl.ItemContainerTransitions>
+                                                <TransitionCollection>
+                                                    <AddDeleteThemeTransition/>
+                                                </TransitionCollection>
+                                            </ItemsControl.ItemContainerTransitions>
+                                        </ItemsControl>
+                                    </ScrollViewer>
+                                </Grid>
+                            </Border>
+                        </Grid>
+                    </Grid>
+                </ScrollViewer>
+            </PivotItem>
+            <PivotItem Header="Connections" Padding="0,5">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" VerticalScrollMode="Enabled" VerticalAlignment="Top" ZoomMode="Disabled">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock FontSize="{x:Bind ViewModel.MainFont, Mode=OneWay}" MaxWidth="700" TextWrapping="Wrap" TextAlignment="Justify" HorizontalAlignment="Left">
+                    You can manage your connection for calculate their usage or show them in the app.
+                    <LineBreak/>
+                    Calculate: when activated for a connection then usage of that connection will be added for usage of all connections in your data plan.
+                    <LineBreak/>
+                    Active: when activated for a connection then you can see it in list of your data plan or in your home page connection list.
+                        </TextBlock>
+                        <TextBlock Text="Connections:" Margin="0,10,0,5" FontSize="{x:Bind ViewModel.MainFont, Mode=OneWay}" Grid.Row="1"/>
+                        <ItemsControl x:Name="ListConnections" Grid.Row="2" ScrollViewer.HorizontalScrollMode="Disabled" ScrollViewer.VerticalScrollMode="Disabled" HorizontalAlignment="Left"/>
+                    </Grid>
+                </ScrollViewer>
+            </PivotItem>
+        </Pivot>
+    </Grid>
+
+</Page>

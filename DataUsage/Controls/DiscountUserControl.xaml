@@ -1,0 +1,71 @@
+﻿<UserControl
+    x:Name="MainUserControl"
+    x:Class="DataUsage.Controls.DiscountUserControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:DataUsage.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="140"
+    d:DesignWidth="400">
+    <UserControl.Resources>
+        <Storyboard x:Name="ShowButtonAnimation">
+            <DoubleAnimation x:Name="DoubleAnimationShowButtons" Storyboard.TargetName="StackPanelButtons" Storyboard.TargetProperty="Height" From="0" To="60" Duration="0:0:0.3" EnableDependentAnimation="True"/>
+        </Storyboard>
+        <Storyboard x:Name="HideButtonAnimation">
+            <DoubleAnimation x:Name="DoubleAnimationHideButtons" Storyboard.TargetName="StackPanelButtons" Storyboard.TargetProperty="Height" To="0" Duration="0:0:0.3" EnableDependentAnimation="True"/>
+        </Storyboard>
+    </UserControl.Resources>
+
+    <Border x:Name="MainBorder" Style="{StaticResource BorderBox}">
+        <Grid x:Name="GridAll" Tapped="GridAll_Tapped">
+            <Grid x:Name="GridMain" Background="Transparent" Margin="5">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <TextBlock x:Name="lblConnectionName" Text="Connection Name" FontSize="{x:Bind ViewModel.FontRatio(ViewModel.TopicFont,1.1), Mode=OneWay}" TextAlignment="Center" Padding="0,0,0,5"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1" VerticalAlignment="Center">
+                    <TextBlock Text="Discount: " FontSize="{x:Bind ViewModel.TopicFont, Mode=OneWay}" Margin="0,0,5,0"/>
+                    <TextBlock x:Name="lblDiscount" Text="Discount" FontSize="{x:Bind ViewModel.MainFont, Mode=OneWay}" VerticalAlignment="Center"/>
+                </StackPanel>
+                <Rectangle Height="1.5" Fill="{x:Bind ViewModel.OpposedAppColorBrush,Mode=OneWay}" Grid.Row="2" Margin="0,5"/>
+                <Grid Grid.Row="3">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Start Time" TextAlignment="Center" FontSize="{x:Bind ViewModel.TopicFont, Mode=OneWay}" Padding="5"/>
+                    <TextBlock Text="End Time" TextAlignment="Center" FontSize="{x:Bind ViewModel.TopicFont, Mode=OneWay}" Grid.Column="2" Padding="5"/>
+                    <TextBlock x:Name="lblStartTime"  TextAlignment="Center" FontSize="{x:Bind ViewModel.MainFont, Mode=OneWay}" Padding="5" Grid.Row="1"/>
+                    <TextBlock Text="To" TextAlignment="Center" FontSize="{x:Bind ViewModel.MainFont, Mode=OneWay}" Margin="5,0" Padding="5" Grid.Column="1" Grid.RowSpan="2" VerticalAlignment="Center"/>
+                    <TextBlock x:Name="lblEndTime" TextAlignment="Center" FontSize="{x:Bind ViewModel.MainFont, Mode=OneWay}" Padding="5" Grid.Column="2" Grid.Row="1"/>
+                </Grid>
+            </Grid>
+            <Border x:Name="StackPanelButtons" VerticalAlignment="Bottom" Background="{x:Bind ViewModel.BoxSolidBrushColor, Mode=OneWay}" Grid.Row="1" Opacity="0">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Button x:Name="AppBarEdit" Width="68" Padding="0,5" Style="{StaticResource ButtonWithoutBorder}" Background="Transparent" Click="AppBarEdit_Click">
+                        <StackPanel VerticalAlignment="Center">
+                            <SymbolIcon Symbol="Edit" Margin="0,0,0,5"/>
+                            <TextBlock Text="Edit" TextAlignment="Center" FontSize="{x:Bind ViewModel.MainFont,Mode=OneWay}" />
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="AppBarDelete" Width="68" Padding="0,5" Style="{StaticResource ButtonWithoutBorder}" Background="Transparent" Click="AppBarDelete_Click">
+                        <StackPanel VerticalAlignment="Center">
+                            <SymbolIcon Symbol="Delete" Margin="0,0,0,5"/>
+                            <TextBlock Text="Delete" TextAlignment="Center" FontSize="{x:Bind ViewModel.MainFont,Mode=OneWay}" />
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Border>
+</UserControl>

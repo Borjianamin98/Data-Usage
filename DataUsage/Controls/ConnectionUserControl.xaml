@@ -1,0 +1,56 @@
+﻿<UserControl
+    x:Class="DataUsage.Controls.ConnectionUserControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:DataUsage.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="150"
+    d:DesignWidth="310">
+    <Border Style="{StaticResource BorderBox}" Padding="5">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <local:ConnectionTypeImageUserControl x:Name="PathImage" Type="{x:Bind PathImageType, Mode=OneWay}"/>
+            <Grid Grid.Column="1" VerticalAlignment="Center" Margin="5">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock x:Name="lblConnectionName" Text="{x:Bind ConnectionName, Mode=OneWay}" FontSize="{x:Bind ViewModel.TopicFont, Mode=OneWay}" VerticalAlignment="Center"/>
+                    <Button x:Name="btnNickname" Grid.Column="1" Style="{StaticResource ButtonWithoutBorder}" FontSize="{x:Bind ViewModel.MainFont, Mode=OneWay}" 
+                            Background="Transparent" AllowFocusOnInteraction="True" Padding="5" Margin="5,0">
+                        <SymbolIcon Symbol="Edit"/>
+                        <Button.Flyout>
+                            <Flyout>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Nickname:" Margin="0,0,5,0" FontSize="{x:Bind ViewModel.MainFont, Mode=OneWay}" VerticalAlignment="Center"/>
+                                    <TextBox x:Name="txtNickname" Text="{x:Bind Nickname, Mode=TwoWay}"/>
+                                </StackPanel>
+                            </Flyout>
+                        </Button.Flyout>
+                    </Button>
+                </Grid>
+                <StackPanel Orientation="Horizontal" Grid.Row="1">
+                    <TextBlock Text="Nickname:" Margin="0,0,5,0" FontSize="{x:Bind ViewModel.MainFont, Mode=OneWay}" VerticalAlignment="Center"/>
+                    <TextBlock x:Name="lblNickname" FontSize="{x:Bind ViewModel.MainFont, Mode=OneWay}" VerticalAlignment="Center"/>
+                </StackPanel>
+                <StackPanel Grid.Row="2">
+                    <CheckBox x:Name="ChkActive" IsChecked="{x:Bind Active, Mode=TwoWay}" Content="Active" Padding="5,0" VerticalContentAlignment="Center" HorizontalAlignment="Stretch"
+                              MinWidth="0"/>
+                    <CheckBox x:Name="ChkCalculate" IsChecked="{x:Bind Calculate, Mode=TwoWay}" Content="Calculate" Padding="5,0" VerticalContentAlignment="Center" HorizontalAlignment="Stretch"
+                              MinWidth="0" IsEnabled="{x:Bind ChkActive.IsChecked.GetValueOrDefault(x:False), Mode=OneWay}"/>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </Border>
+</UserControl>

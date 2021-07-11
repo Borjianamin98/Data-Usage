@@ -1,0 +1,162 @@
+﻿<Page
+    x:Class="DataUsage.View.ChartPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:DataUsage.View"
+    xmlns:model="using:CommonClass.Model"
+    xmlns:syncfusion="using:Syncfusion.UI.Xaml.Charts"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d" Loaded="Page_Loaded">
+    <Page.Resources>
+        <DataTemplate x:Key="tooltipNormalTemplate">
+            <Border BorderThickness="1.5" BorderBrush="Black" Background="{ThemeResource CustomRadioButtonCheckGlyphFill}" Padding="5">
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                    <TextBlock Text="{Binding Item.Date}" Margin="0,0,10,0" TextAlignment="Center"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <TextBlock Text="Download:" Margin="0,0,5,0"/>
+                        <TextBlock Text="{Binding Item.Download}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <TextBlock Text="Upload:" Margin="0,0,5,0"/>
+                        <TextBlock Text="{Binding Item.Upload}"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </DataTemplate>
+        <DataTemplate x:Key="tooltipDiscountTemplate">
+            <Border BorderThickness="1.5" BorderBrush="Black" Background="{ThemeResource CustomRadioButtonCheckGlyphFill}" Padding="5">
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                    <TextBlock Text="{Binding Item.Date}" Margin="0,0,10,0" TextAlignment="Center"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <TextBlock Text="Download:" Margin="0,0,5,0"/>
+                        <TextBlock Text="{Binding Item.DownloadDiscount}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <TextBlock Text="Upload:" Margin="0,0,5,0"/>
+                        <TextBlock Text="{Binding Item.UploadDiscount}"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </DataTemplate>
+    </Page.Resources>
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="VisualStateGroup">
+                <VisualState x:Name="VisualStateMin0">
+                    <VisualState.Setters>
+                        <Setter Target="SeriesDownload.IsTransposed" Value="true"/>
+                        <Setter Target="SeriesUpload.IsTransposed" Value="true"/>
+                    </VisualState.Setters>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="1"/>
+                    </VisualState.StateTriggers>
+                </VisualState>
+                <VisualState x:Name="VisualStateMin800">
+                    <VisualState.Setters/>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="800"/>
+                    </VisualState.StateTriggers>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <syncfusion:SfChart x:Name="ChartData" Margin="0,5,10,0" Palette="Custom" Grid.Row="1" FontSize="{x:Bind ViewModel.MainFont, Mode=OneWay}">
+            <syncfusion:SfChart.Behaviors>
+                <syncfusion:ChartZoomPanBehavior EnableMouseWheelZooming="True" EnablePinchZooming="True"
+                                                 ToolBarOrientation="Vertical" EnablePanning="True" ResetOnDoubleTap="True"/>
+            </syncfusion:SfChart.Behaviors>
+            <syncfusion:SfChart.PrimaryAxis>
+                <syncfusion:CategoryAxis FontSize="{x:Bind ViewModel.MainFont}" ShowTrackBallInfo="True"/>
+            </syncfusion:SfChart.PrimaryAxis>
+            <syncfusion:SfChart.SecondaryAxis>
+                <syncfusion:NumericalAxis Header="Usage (MB)" FontSize="{x:Bind ViewModel.MainFont}" ShowTrackBallInfo="True"/>
+            </syncfusion:SfChart.SecondaryAxis>
+            <syncfusion:SfChart.ColorModel>
+                <syncfusion:ChartColorModel>
+                    <syncfusion:ChartColorModel.CustomBrushes>
+                        <SolidColorBrush Color="Blue"/>
+                        <SolidColorBrush Color="CornflowerBlue"/>
+                    </syncfusion:ChartColorModel.CustomBrushes>
+                </syncfusion:ChartColorModel>
+            </syncfusion:SfChart.ColorModel>
+            <syncfusion:SfChart.Legend>
+                <syncfusion:ChartLegend IconWidth="{x:Bind ViewModel.FontRatio(ViewModel.MainFont, 1.3),Mode=OneWay}"
+                                                                IconHeight="{x:Bind ViewModel.FontRatio(ViewModel.MainFont, 1.3),Mode=OneWay}" 
+                                                                VerticalContentAlignment="Center" FontSize="{x:Bind ViewModel.MainFont,Mode=OneWay}"/>
+            </syncfusion:SfChart.Legend>
+            <syncfusion:StackingColumnSeries x:Name="SeriesDownload" LegendIcon="Circle" Label="Download" GroupingLabel="Normal" XBindingPath="Date" ShowTooltip="True"/>
+            <syncfusion:StackingColumnSeries x:Name="SeriesUpload" LegendIcon="Circle" Label="Upload" GroupingLabel="Normal" XBindingPath="Date" ShowTooltip="True"/>
+        </syncfusion:SfChart>
+
+        <CommandBar Grid.Row="2">
+            <CommandBar.SecondaryCommands>
+                <AppBarToggleButton x:Name="ToggleCrossHair" Label="CrossHair" Click="ToggleCrossHair_Click">
+                    <AppBarToggleButton.Icon>
+                        <FontIcon Glyph="&#xE890;"/>
+                    </AppBarToggleButton.Icon>
+                </AppBarToggleButton>
+            </CommandBar.SecondaryCommands>
+            <CommandBar.Content>
+                <Grid/>
+            </CommandBar.Content>
+            <AppBarButton x:Name="AppBarRefresh" Icon="Refresh" Label="Refresh" Click="AppBarRefresh_Click"/>
+            <AppBarToggleButton x:Name="AppBarDownload" Icon="Download" Label="Download" IsChecked="True" Click="AppBarDownload_Click" Style="{StaticResource AppBarToggleButtonStyle}"/>
+            <AppBarToggleButton x:Name="AppBarUpload" Icon="Upload" Label="Upload" IsChecked="True" Click="AppBarUpload_Click" Style="{StaticResource AppBarToggleButtonStyle}"/>
+            <AppBarButton Icon="Setting" Label="Options" AllowFocusOnInteraction="True">
+                <AppBarButton.Flyout>
+                    <Flyout>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="200"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="Connection:" Grid.Row="0" FontSize="{x:Bind ViewModel.MainFont, Mode=OneWay}" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                            <ComboBox x:Name="ComboBoxConnections" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Stretch" ItemTemplate="{StaticResource ListConnections}"
+                                      Margin="0,0,0,5" SelectionChanged="ComboBoxConnections_SelectionChanged">
+                                <ComboBox.ItemContainerTransitions>
+                                    <TransitionCollection>
+                                        <EntranceThemeTransition FromVerticalOffset="50"/>
+                                    </TransitionCollection>
+                                </ComboBox.ItemContainerTransitions>
+                            </ComboBox>
+                            <TextBlock Text="Duration:" Grid.Row="1" FontSize="{x:Bind ViewModel.MainFont, Mode=OneWay}" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                            <ComboBox x:Name="ComboBoxDuration" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Stretch" SelectedValuePath="Content"
+                                      Margin="0,0,0,5" PlaceholderText="Choose Duration" SelectionChanged="ComboBoxDuration_SelectionChanged">
+                                <ComboBox.ItemContainerTransitions>
+                                    <TransitionCollection>
+                                        <EntranceThemeTransition FromVerticalOffset="50"/>
+                                    </TransitionCollection>
+                                </ComboBox.ItemContainerTransitions>
+                                <ComboBoxItem Content="This Month"/>
+                                <ComboBoxItem Content="This Week"/>
+                                <ComboBoxItem Content="Today"/>
+                                <ComboBoxItem Content="This Hour"/>
+                                <ComboBoxItem Content="24 Hour"/>
+                                <ComboBoxItem Content="Days"/>
+                                <ComboBoxItem Content="Monthly"/>
+                                <ComboBoxItem Content="Data Plan"/>
+                            </ComboBox>
+                            <TextBlock Text="More:" Grid.Row="2" Visibility="{x:Bind ComboBoxMore.Visibility, Mode=OneWay}" FontSize="{x:Bind ViewModel.MainFont, Mode=OneWay}" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                            <ComboBox x:Name="ComboBoxMore" Grid.Row="2" Grid.Column="2" HorizontalAlignment="Stretch" Margin="0,0,0,5" Visibility="Collapsed"/>
+                            <TextBlock Text="Discount:" Grid.Row="3" FontSize="{x:Bind ViewModel.MainFont, Mode=OneWay}" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                            <ToggleSwitch x:Name="toggleDiscount" OnContent="On" OffContent="Off" FontSize="{x:Bind ViewModel.MainFont, Mode=OneWay}" Grid.Row="3" Grid.Column="1" Toggled="toggleDiscount_Toggled"/>
+                        </Grid>
+                    </Flyout>
+                </AppBarButton.Flyout>
+            </AppBarButton>
+        </CommandBar>
+    </Grid>
+</Page>

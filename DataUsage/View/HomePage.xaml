@@ -1,0 +1,319 @@
+﻿<Page
+    x:Class="DataUsage.View.HomePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:DataUsage.View"
+    xmlns:model="using:CommonClass.Model"
+    xmlns:control="using:DataUsage.Controls"
+    xmlns:syncfusion="using:Syncfusion.UI.Xaml.Charts"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Page.Resources>
+        <DataTemplate x:Key="ReportWithDataPlanTemplate" x:DataType="model:ConnectionReport">
+            <Grid>
+                <Grid.Background>
+                    <SolidColorBrush Color="{x:Bind TableColor, Mode=OneWay}"/>
+                </Grid.Background>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="50" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="{x:Bind Date, Mode=OneWay}" TextAlignment="Center" VerticalAlignment="Center" Grid.Column="0"/>
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Grid.Column="1">
+                    <TextBlock Text="{x:Bind Upload, Mode=OneWay}" Foreground="{Binding ElementName=rectNormalColor,Path=Fill}"
+                                                                   Padding="0,5" HorizontalAlignment="Center"/>
+                    <TextBlock Text="{x:Bind UploadDiscount, Mode=OneWay}" Foreground="{Binding ElementName=rectDiscountColor,Path=Fill}"
+                                                                   Padding="0,5" HorizontalAlignment="Center"/>
+                </StackPanel>
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Grid.Column="2">
+                    <TextBlock Text="{x:Bind Download, Mode=OneWay}" Foreground="{Binding ElementName=rectNormalColor,Path=Fill}"
+                                                                   Padding="0,5" HorizontalAlignment="Center"/>
+                    <TextBlock Text="{x:Bind DownloadDiscount, Mode=OneWay}" Foreground="{Binding ElementName=rectDiscountColor,Path=Fill}"
+                                                                   Padding="0,5" HorizontalAlignment="Center" />
+                </StackPanel>
+                <Rectangle Height="1.5" Fill="{StaticResource SystemControlBackgroundAccentBrush}" Grid.Row="1" Grid.ColumnSpan="4"/>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="ReportWithoutDataPlanTemplate" x:DataType="model:ConnectionReport">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="50" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="{x:Bind Date, Mode=OneWay}" TextAlignment="Center" VerticalAlignment="Center" Grid.Column="0"/>
+                <TextBlock Text="{x:Bind Upload, Mode=OneWay}" Foreground="{Binding ElementName=rectNormalColor,Path=Fill}"
+                                                                   Padding="0,10" HorizontalAlignment="Center" Grid.Column="1"/>
+                <TextBlock Text="{x:Bind Download, Mode=OneWay}" Foreground="{Binding ElementName=rectNormalColor,Path=Fill}"
+                                                                   Padding="0,10" HorizontalAlignment="Center" Grid.Column="2"/>
+                <Rectangle Height="1.5" Fill="{StaticResource SystemControlBackgroundAccentBrush}" Grid.Row="1" Grid.ColumnSpan="4"/>
+            </Grid>
+        </DataTemplate>
+    </Page.Resources>
+
+    <Grid>
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="VisualStateGroup">
+                <VisualState x:Name="VisualStateMin0">
+                    <VisualState.Setters>
+                        <Setter Target="MainGrid.ColumnDefinitions[1].Width" Value="0"/>
+                        <Setter Target="MainGrid.ColumnDefinitions[2].Width" Value="0"/>
+                        <Setter Target="MainGrid.RowDefinitions[0].Height" Value="Auto"/>
+                        <Setter Target="GridColumn2.(Grid.Column)" Value="0"/>
+                        <Setter Target="GridColumn2.(Grid.Row)" Value="1"/>
+                        <Setter Target="GridColumn3.(Grid.Column)" Value="0"/>
+                        <Setter Target="GridColumn3.(Grid.Row)" Value="2"/>
+                        <Setter Target="ScrollViewerReport.MaxHeight" Value="500"/>
+                        <Setter Target="MainScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+                        <Setter Target="StackPanelPieChartInfo.(Grid.Row)" Value="1"/>
+                        <Setter Target="StackPanelPieChartInfo.Orientation" Value="Horizontal"/>
+                        <Setter Target="StackPanelPieChartInfo.(Grid.Column)" Value="0"/>
+                        <Setter Target="ComboBoxConnections.(RelativePanel.RightOf)" Value=""/>
+                        <Setter Target="ComboBoxConnections.(RelativePanel.Below)" Value="lblConnection"/>
+                        <Setter Target="ComboBoxConnections.(RelativePanel.AlignLeftWithPanel)" Value="true"/>
+                        <Setter Target="lblConnection.(RelativePanel.AlignVerticalCenterWithPanel)" Value="false"/>
+                    </VisualState.Setters>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="1"/>
+                    </VisualState.StateTriggers>
+                </VisualState>
+                <VisualState x:Name="VisualStateMin800">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="800"/>
+                    </VisualState.StateTriggers>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+        <ScrollViewer x:Name="MainScrollViewer" VerticalScrollBarVisibility="Disabled">
+            <Grid x:Name="MainGrid">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid x:Name="GridColumn1" Grid.Column="0" Padding="5,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Border Background="{x:Bind ViewModel.BoxSolidBrushColor, Mode=OneWay}" Style="{StaticResource BorderBox}" Margin="0,5" Grid.Row="0">
+                        <TextBlock Text="Connections Usage" FontSize="{x:Bind ViewModel.TopicFont}" Padding="10" HorizontalAlignment="Stretch" VerticalAlignment="Center" TextAlignment="Center"/>
+                    </Border>
+                    <Border Style="{StaticResource BorderBox}" Margin="0,0,0,5" Grid.Row="1">
+                        <StackPanel Orientation="Horizontal" Padding="5">
+                            <TextBlock Text="Bandwidth capacity: " FontSize="{x:Bind ViewModel.MainFont}" Margin="0,0,5,0"/>
+                            <TextBlock x:Name="lblBandwidthCap" FontSize="{x:Bind ViewModel.MainFont}"/>
+                        </StackPanel>
+                    </Border>
+                    <Border Style="{StaticResource BorderBox}" Margin="0,0,0,5" Grid.Row="2" Padding="5">
+                        <Grid Margin="0,5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <control:DateUserControl x:Name="FromDateUserControl" HorizontalAlignment="Center" DaySize="70" Grid.Column="0"/>
+                            <control:DateUserControl x:Name="ToDateUserControl" HorizontalAlignment="Center" DaySize="70" Grid.Column="1"/>
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource BorderBox}" Margin="0,0,0,5" Grid.Row="3">
+                        <Grid Padding="5">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <syncfusion:SfChart VerticalAlignment="Stretch" HorizontalAlignment="Stretch" AreaBorderBrush="Transparent" AreaBorderThickness="0" Padding="0" Margin="0">
+                                    <!--Initialize the horizontal axis for SfChart-->
+                                    <syncfusion:SfChart.PrimaryAxis>
+                                        <syncfusion:CategoryAxis/>
+                                    </syncfusion:SfChart.PrimaryAxis>
+                                    <!--Initialize the vertical axis for SfChart-->
+                                    <syncfusion:SfChart.SecondaryAxis>
+                                        <syncfusion:NumericalAxis/>
+                                    </syncfusion:SfChart.SecondaryAxis>
+
+                                    <!--Initialize the series for SfChart-->
+                                    <syncfusion:PieSeries x:Name="PieUsage" XBindingPath="Name" LegendIcon="Circle" YBindingPath="Value" Palette="Custom">
+                                        <syncfusion:PieSeries.ColorModel>
+                                            <syncfusion:ChartColorModel x:Name="PieChartColors"/>
+                                        </syncfusion:PieSeries.ColorModel>
+                                    </syncfusion:PieSeries>
+                                </syncfusion:SfChart>
+                                <Grid x:Name="GridNoPieChartData" Visibility="Collapsed">
+                                    <TextBlock TextAlignment="Center" VerticalAlignment="Center" Text="No data to display" FontSize="{x:Bind ViewModel.MainFont,Mode=OneWay}"/>
+                                </Grid>
+                                <StackPanel x:Name="StackPanelPieChartInfo" Orientation="Vertical" HorizontalAlignment="Center" Grid.Column="1" VerticalAlignment="Center">
+                                    <StackPanel x:Name="StackPanelPieChartUpload" Orientation="Vertical" Margin="1">
+                                        <Border Background="{x:Bind ViewModel.PieChartColors[0],Mode=OneWay}" CornerRadius="4" Padding="2,5">
+                                            <TextBlock Text="Upload" Foreground="White" FontSize="{x:Bind ViewModel.MainFont}" TextAlignment="Center"/>
+                                        </Border>
+                                        <TextBlock x:Name="lblPieUpload" Text="Upload" FontSize="{x:Bind ViewModel.MainFont}"
+                                                   TextAlignment="Center" Padding="2,5"/>
+                                    </StackPanel>
+                                    <StackPanel x:Name="StackPanelPieChartDownload" Orientation="Vertical" Margin="1">
+                                        <Border Background="{x:Bind ViewModel.PieChartColors[1],Mode=OneWay}" CornerRadius="4" Padding="2,5">
+                                            <TextBlock Text="Download" Foreground="White" FontSize="{x:Bind ViewModel.MainFont}" TextAlignment="Center"/>
+                                        </Border>
+                                        <TextBlock x:Name="lblPieDownload" Text="Download" FontSize="{x:Bind ViewModel.MainFont}"
+                                                   TextAlignment="Center" Padding="2,5"/>
+                                    </StackPanel>
+                                    <StackPanel x:Name="StackPanelPieChartRemaining" Orientation="Vertical" Margin="1">
+                                        <Border Background="{x:Bind ViewModel.PieChartColors[2],Mode=OneWay}" CornerRadius="4" Padding="2,5">
+                                            <TextBlock Text="Remaining" Foreground="White" FontSize="{x:Bind ViewModel.MainFont}" TextAlignment="Center"/>
+                                        </Border>
+                                        <TextBlock x:Name="lblPieRemaining" Text="Remaining" FontSize="{x:Bind ViewModel.MainFont}"
+                                                   TextAlignment="Center" Padding="2,5"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Grid>
+                            <TextBlock Text="Remaining" TextAlignment="Center" FontSize="{x:Bind ViewModel.MainFont}" Padding="0,5" Grid.Row="1"/>
+                            <Grid Grid.Row="2" Margin="0,5">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Rectangle Fill="{x:Bind ViewModel.BoxSolidBrushColor, Mode=OneWay}" Grid.Column="0" />
+                                <Rectangle Fill="{x:Bind ViewModel.BoxSolidBrushColor, Mode=OneWay}" Grid.Column="1"/>
+                                <TextBlock Text="Days" TextAlignment="Center" FontSize="{x:Bind ViewModel.MainFont}" Padding="5"/>
+                                <TextBlock Text="Daily Average" TextAlignment="Center" FontSize="{x:Bind ViewModel.MainFont}" Padding="5" Grid.Column="1"/>
+                                <TextBlock x:Name="lblPieRemainingDays" TextAlignment="Center" FontSize="{x:Bind ViewModel.MainFont}" Padding="5" Grid.Row="1"/>
+                                <TextBlock x:Name="lblPieDailyAvg" TextAlignment="Center" FontSize="{x:Bind ViewModel.MainFont}" Padding="5" Grid.Row="1" Grid.Column="1"/>
+                            </Grid>
+                        </Grid>
+                    </Border>
+                </Grid>
+                <Grid x:Name="GridColumn2" Grid.Column="1" Padding="5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Border Background="{x:Bind ViewModel.BoxSolidBrushColor, Mode=OneWay}" Style="{StaticResource BorderBox}" Margin="0,0,0,5">
+                        <TextBlock Text="Information" FontSize="{x:Bind ViewModel.TopicFont}" Padding="10" HorizontalAlignment="Stretch" VerticalAlignment="Center" TextAlignment="Center"/>
+                    </Border>
+                    <Border Grid.Row="1" Style="{StaticResource BorderBox}">
+                        <StackPanel Orientation="Vertical" Padding="5">
+                            <RelativePanel x:Name="RelativePanelConnection">
+                                <TextBlock x:Name="lblConnection" Text="Connection:" RelativePanel.AlignVerticalCenterWithPanel="True" FontSize="{x:Bind ViewModel.MainFont, Mode=OneWay}" Padding="5" VerticalAlignment="Center"/>
+                                <ComboBox x:Name="ComboBoxConnections" RelativePanel.RightOf="lblConnection" RelativePanel.AlignRightWithPanel="True" Grid.Column="1" HorizontalAlignment="Stretch" Margin="5" FontSize="{x:Bind ViewModel.MainFont, Mode=OneWay}" 
+                                      VerticalAlignment="Stretch" SelectionChanged="ComboBoxConnections_SelectionChanged" ItemTemplate="{StaticResource ListConnections}">
+                                    <ComboBox.ItemContainerTransitions>
+                                        <TransitionCollection>
+                                            <EntranceThemeTransition FromVerticalOffset="50"/>
+                                        </TransitionCollection>
+                                    </ComboBox.ItemContainerTransitions>
+                                </ComboBox>
+                            </RelativePanel>
+                            <TextBlock Text="Interface:" FontSize="{x:Bind ViewModel.MainFont}" Padding="5" Margin="0,5" Grid.Row="2"/>
+                            <TextBlock Text="{x:Bind ((model:NetworkProfile)ComboBoxConnections.SelectedItem).Type, Mode=OneWay}" FontSize="{x:Bind ViewModel.MainFont}"
+                                       Padding="5" Margin="40,5,0,5" Grid.Row="2" Grid.Column="1"/>
+                            <TextBlock Text="Connectivity:" FontSize="{x:Bind ViewModel.MainFont}" Padding="5" Margin="0,5" Grid.Row="3"/>
+                            <TextBlock Text="{x:Bind ((model:NetworkProfile)ComboBoxConnections.SelectedItem).ConnectivityLevel, Mode=OneWay}" FontSize="{x:Bind ViewModel.MainFont}"
+                                       Padding="5" Margin="40,5,0,5" Grid.Row="3" Grid.Column="1"/>
+                            <TextBlock Text="Authentication Type:" FontSize="{x:Bind ViewModel.MainFont}" Padding="5" Margin="0,5" Grid.Row="4"/>
+                            <TextBlock Text="{x:Bind ((model:NetworkProfile)ComboBoxConnections.SelectedItem).AuthenticationType, Mode=OneWay}" FontSize="{x:Bind ViewModel.MainFont}"
+                                       Padding="5" Margin="40,5,0,5" Grid.Row="4" Grid.Column="1"/>
+                            <TextBlock Text="Encryption Type:" FontSize="{x:Bind ViewModel.MainFont}" Padding="5" Margin="0,5" Grid.Row="5"/>
+                            <TextBlock Text="{x:Bind ((model:NetworkProfile)ComboBoxConnections.SelectedItem).EncryptionType, Mode=OneWay}" FontSize="{x:Bind ViewModel.MainFont}"
+                                       Padding="5" Margin="40,5,0,5" Grid.Row="5" Grid.Column="1"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+                <Grid x:Name="GridColumn3" Grid.Column="2" Padding="5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Border Background="{x:Bind ViewModel.BoxSolidBrushColor, Mode=OneWay}" Style="{StaticResource BorderBox}" Margin="0,0,0,5">
+                        <Grid>
+                            <TextBlock Text="Report" FontSize="{x:Bind ViewModel.TopicFont}" Padding="10" HorizontalAlignment="Stretch" VerticalAlignment="Center" TextAlignment="Center"/>
+                            <Button x:Name="btnRefreshReport" Style="{StaticResource ButtonWithoutBorder}" Click="btnRefreshReport_Click" HorizontalAlignment="Right"
+                                    VerticalAlignment="Stretch" Margin="0,0,10,0" Background="Transparent">
+                                <SymbolIcon Symbol="Refresh"/>
+                            </Button>
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource BorderBox}" Grid.Row="1" Padding="5">
+                        <Grid MinHeight="200">
+                            <TextBlock x:Name="lblPlaceholderReport" Text="Choose A Connection" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="{x:Bind ViewModel.MainFont,Mode=OneWay}"/>
+                            <Grid x:Name="GridReport" Visibility="Collapsed">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <Grid Background="{x:Bind ViewModel.BoxSolidBrushColor, Mode=OneWay}" Padding="5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="50" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Date" FontSize="{x:Bind ViewModel.MainFont, Mode=OneWay}" TextAlignment="Center" Grid.Column="0"/>
+                                    <TextBlock Text="Upload" FontSize="{x:Bind ViewModel.MainFont, Mode=OneWay}" TextAlignment="Center" Grid.Column="1"/>
+                                    <TextBlock Text="Download" FontSize="{x:Bind ViewModel.MainFont, Mode=OneWay}" TextAlignment="Center" Grid.Column="2"/>
+                                </Grid>
+                                <Rectangle Height="1.5" Grid.Row="1" Fill="{StaticResource SystemControlBackgroundAccentBrush}"/>
+                                <ScrollViewer x:Name="ScrollViewerReport" VerticalScrollBarVisibility="Auto" Grid.Row="2"
+                                              VerticalScrollMode="Enabled" VerticalAlignment="Top" ZoomMode="Disabled">
+                                    <ItemsControl x:Name="ListReport" FontSize="{x:Bind ViewModel.MainFont,Mode=OneWay}"
+                                              ScrollViewer.HorizontalScrollMode="Disabled" ScrollViewer.VerticalScrollMode="Disabled">
+                                        <ItemsControl.ItemContainerTransitions>
+                                            <TransitionCollection>
+                                                <EntranceThemeTransition FromVerticalOffset="100" FromHorizontalOffset="0"/>
+                                            </TransitionCollection>
+                                        </ItemsControl.ItemContainerTransitions>
+                                    </ItemsControl>
+                                </ScrollViewer>
+                                <Rectangle Height="1.5" Grid.Row="3" Fill="{StaticResource SystemControlBackgroundAccentBrush}" Margin="0,5"/>
+                                <StackPanel Grid.Row="4" Margin="0,5">
+                                    <StackPanel x:Name="StackPanelRectNormal" Orientation="Horizontal" Grid.Column="0" Margin="0,0,0,5">
+                                        <Rectangle x:Name="rectNormalColor" Width="20" Height="20" Fill="{x:Bind ViewModel.OpposedAppColorBrush, Mode=OneWay}" Margin="0,0,5,0"/>
+                                        <TextBlock Text="Only Usage" VerticalAlignment="Center" FontSize="{x:Bind ViewModel.MainFont, Mode=OneWay}" TextAlignment="Left"/>
+                                    </StackPanel>
+                                    <StackPanel x:Name="StackPanelRectDiscount" Orientation="Horizontal" Grid.Column="1">
+                                        <Rectangle x:Name="rectDiscountColor" Width="20" Height="20" Fill="{StaticResource SystemControlBackgroundAccentBrush}" Margin="0,0,5,0"/>
+                                        <TextBlock Text="Usage With Discount" VerticalAlignment="Center" FontSize="{x:Bind ViewModel.MainFont, Mode=OneWay}" TextAlignment="Left"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Grid>
+                            <ProgressRing x:Name="ProgressReport" Width="45" Height="45" Visibility="Collapsed" />
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Grid>
+        </ScrollViewer>
+    </Grid>
+</Page>
